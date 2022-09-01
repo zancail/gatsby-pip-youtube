@@ -1,42 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import YTPlayer from "yt-player";
 import classNames from "classnames";
+import { PipContext } from "../context";
 
 import * as styles from "./pipplayer.module.scss";
 
-const PipPlayer = ({ url }) => {
-  const [originalCurrentTime, setOriginalCurrentTime] = useState(0);
-  let originalPlayer = null;
+const PipPlayer = ({ pipData }) => {
+  const { setPip } = useContext(PipContext);
+  let pipPlayer;
   useEffect(() => {
-    if (document.getElementById("originalPlayer")) {
-      originalPlayer = new YTPlayer("#originalPlayer");
-      if (originalPlayer) {
-        originalPlayer.load("uYR4ZMlLUwI");
-        originalPlayer.setVolume(100);
-        originalPlayer.on("paused", () => {
-          setOriginalCurrentTime(originalPlayer.getCurrentTime());
-        });
-      }
+    if (pipData.url) {
+      pipPlayer = new YTPlayer("#pipPlayer");
+      pipPlayer.load(pipData.url, true, pipData.start);
     }
-    return () => {
-      // setOriginalPlayer(null);
-    };
-  }, []);
+  }, [pipData]);
 
-  const handleOnClick = () => {
-    originalPlayer.pause();
-    const pipPlayer = new YTPlayer("#pipPlayer");
-
-    pipPlayer.load("uYR4ZMlLUwI", true, originalPlayer.getCurrentTime());
+  const handleClose = () => {
+    setPip({ url: null, start: 0 });
+    pipPlayer.destroy();
   };
 
   return (
-    <div className="mb-4">
-      <div id="originalPlayer"></div>
-      <button type="button" onClick={handleOnClick}>
-        Open pip
+    <div className={classNames(styles.pip, { "d-block": pipData.url })}>
+      <button type="button">Big</button>
+      <button type="button" onClick={handleClose}>
+        Close
       </button>
-      <div className={classNames(styles.pip, "ratio ratio-16x9")}>
+      <div className={classNames({ "ratio ratio-16x9": pipData.url })}>
         <div id="pipPlayer"></div>
       </div>
     </div>

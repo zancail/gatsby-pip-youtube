@@ -4,7 +4,7 @@ import { Link, graphql } from "gatsby";
 import Bio from "../components/bio";
 import Layout from "../components/layout";
 import Seo from "../components/seo";
-import PipPlayer from "../components/pipplayer";
+import HeaderPlayer from "../components/headerplayer";
 
 const BlogPostTemplate = ({
   data: { previous, next, site, contentfulBlogPost: post },
@@ -27,7 +27,7 @@ const BlogPostTemplate = ({
           dangerouslySetInnerHTML={{ __html: post.description?.raw }}
           itemProp="articleBody"
         />
-        <PipPlayer />
+        <HeaderPlayer />
         <hr />
         <footer>
           <Bio />
