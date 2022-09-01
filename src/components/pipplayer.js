@@ -32,7 +32,7 @@ const PipPlayer = ({ pipData }) => {
       ...{ fullScreen: true, start: statePlayer.getCurrentTime() },
     });
     statePlayer.destroy();
-    // navigate(pipData.url);
+    navigate(pipData.url);
   };
 
   return (
