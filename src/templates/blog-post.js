@@ -23,11 +23,12 @@ const BlogPostTemplate = ({
           <h1 itemProp="headline">{post.title}</h1>
           <p>{post.date}</p>
         </header>
+        <HeaderPlayer videoId="0ZQXcXeDn_g" />
         <section
           dangerouslySetInnerHTML={{ __html: post.description?.raw }}
           itemProp="articleBody"
         />
-        <HeaderPlayer />
+        <HeaderPlayer videoId="uYR4ZMlLUwI" />
         <hr />
         <footer>
           <Bio />

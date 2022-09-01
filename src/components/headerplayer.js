@@ -2,33 +2,51 @@ import React, { useContext, useEffect, useState } from "react";
 import YTPlayer from "yt-player";
 import { PipContext } from "../context";
 
-const HeaderPlayer = ({ url }) => {
+const HeaderPlayer = ({ videoId }) => {
   const [statePlayer, setStatePlayer] = useState();
-  const { setPip } = useContext(PipContext);
-  useEffect(() => {
-    if (document.getElementById("originalPlayer")) {
-      const originalPlayer = new YTPlayer("#originalPlayer");
+  const { setVideoData, videoData } = useContext(PipContext);
+  const isBrowser =
+    typeof window !== undefined && typeof window !== "undefined";
 
-      if (originalPlayer) {
-        originalPlayer.load("uYR4ZMlLUwI");
-        originalPlayer.setVolume(100);
+  useEffect(() => {
+    if (document.getElementById(`originalPlayer${videoId}`)) {
+      const originalPlayer = new YTPlayer(`#originalPlayer${videoId}`);
+
+      if (videoData.id === videoId && videoData.fullScreen === true) {
+        console.log("time to play");
+        originalPlayer.load(videoId, true, videoData.start);
+      } else {
+        if (originalPlayer) {
+          originalPlayer.load(videoId);
+          originalPlayer.setVolume(100);
+        }
+        console.log(videoData);
       }
+
       setStatePlayer(originalPlayer);
     }
     return () => {
-      statePlayer.destroy();
+      if (statePlayer) {
+        statePlayer.destroy();
+      }
       setStatePlayer(undefined);
     };
-  }, []);
+  }, [videoData]);
 
   const handleOpenPip = () => {
     statePlayer.pause();
-    setPip({ url: "uYR4ZMlLUwI", start: statePlayer.getCurrentTime() });
+    const currentUrl = isBrowser ? window.location.pathname : "/";
+    setVideoData({
+      id: videoId,
+      start: statePlayer.getCurrentTime(),
+      url: currentUrl,
+      fullScreen: false,
+    });
   };
 
   return (
     <div className="mb-4">
-      <div id="originalPlayer"></div>
+      <div id={`originalPlayer${videoId}`}></div>
       <button type="button" onClick={handleOpenPip}>
         Open pip
       </button>

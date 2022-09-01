@@ -1,10 +1,10 @@
 import React from "react";
 const defaultContext = {
-  pipUrl: {
-    url: null,
+  videoData: {
+    id: null,
     start: 0,
   },
-  setPip: (url) => {},
+  setVideoData: (data) => {},
 };
 const PipContext = React.createContext(defaultContext);
 export const PipProvider = PipContext.Provider;

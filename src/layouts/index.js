@@ -3,11 +3,11 @@ import PipPlayer from "../components/pipplayer";
 import { PipProvider } from "../context";
 
 export default ({ children }) => {
-  const [pipUrl, setPip] = useState({ url: null, start: 0 });
+  const [videoData, setVideoData] = useState({ id: null, start: 0 });
   return (
-    <PipProvider value={{ pipUrl, setPip }}>
+    <PipProvider value={{ videoData, setVideoData }}>
       {children}
-      <PipPlayer pipData={pipUrl} />
+      <PipPlayer pipData={videoData} />
     </PipProvider>
   );
 };
