@@ -1,16 +1,46 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import YTPlayer from "yt-player";
+import classNames from "classnames";
+
+import * as styles from "./pipplayer.module.scss";
 
 const PipPlayer = ({ url }) => {
-  const getYouTubeVideoIdFromUrl = (url) => {
-    // Our regex pattern to look for a youTube ID
-    const regExp =
-      /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-    //Match the url with the regex
-    const match = url.match(regExp);
-    //Return the result
-    return match && match[2].length === 11 ? match[2] : undefined;
+  const [originalCurrentTime, setOriginalCurrentTime] = useState(0);
+  let originalPlayer = null;
+  useEffect(() => {
+    if (document.getElementById("originalPlayer")) {
+      originalPlayer = new YTPlayer("#originalPlayer");
+      if (originalPlayer) {
+        originalPlayer.load("uYR4ZMlLUwI");
+        originalPlayer.setVolume(100);
+        originalPlayer.on("paused", () => {
+          setOriginalCurrentTime(originalPlayer.getCurrentTime());
+        });
+      }
+    }
+    return () => {
+      // setOriginalPlayer(null);
+    };
+  }, []);
+
+  const handleOnClick = () => {
+    originalPlayer.pause();
+    const pipPlayer = new YTPlayer("#pipPlayer");
+
+    pipPlayer.load("uYR4ZMlLUwI", true, originalPlayer.getCurrentTime());
   };
-  return <div>{getYouTubeVideoIdFromUrl(url)}</div>;
+
+  return (
+    <div className="mb-4">
+      <div id="originalPlayer"></div>
+      <button type="button" onClick={handleOnClick}>
+        Open pip
+      </button>
+      <div className={classNames(styles.pip, "ratio ratio-16x9")}>
+        <div id="pipPlayer"></div>
+      </div>
+    </div>
+  );
 };
 
 export default PipPlayer;

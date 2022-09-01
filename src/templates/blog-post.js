@@ -27,8 +27,7 @@ const BlogPostTemplate = ({
           dangerouslySetInnerHTML={{ __html: post.description?.raw }}
           itemProp="articleBody"
         />
-        <PipPlayer url={post.youtubeUrl} />
-
+        <PipPlayer />
         <hr />
         <footer>
           <Bio />
